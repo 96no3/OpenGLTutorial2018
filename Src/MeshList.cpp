@@ -401,7 +401,7 @@ bool MeshList::Allocate() {
 	//Add(std::begin(vTree), std::end(vTree), std::begin(iTree), std::end(iTree));
 	AddFromObjFile("Res/Tree.obj");
 	//Add(std::begin(vHouse), std::end(vHouse), std::begin(iHouse), std::end(iHouse));
-	AddFromObjFile("Res/House.obj");
+	AddFromObjFile("Res/house2.obj");
 	Add(std::begin(vRock), std::end(vRock), std::begin(iRock), std::end(iRock));
 	Add(std::begin(vGround), std::end(vGround), std::begin(iGround), std::end(iGround));
 	AddFromObjFile("Res/human.obj");

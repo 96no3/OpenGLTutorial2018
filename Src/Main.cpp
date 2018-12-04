@@ -62,7 +62,7 @@ int main() {
 		B, B, B, B, B, B, B, B,
 	};
 	GLuint texId = Texture::CreateImage2D(imageWidth, imageHeight, imageData, GL_RGBA, GL_UNSIGNED_BYTE);
-	GLuint texHouse = Texture::LoadImage2D("Res/House.tga");
+	GLuint texHouse = Texture::LoadImage2D("Res/house2.tga");
 	if (!texId) {
 		return 1;
 	}
@@ -117,7 +117,7 @@ int main() {
 		const float deltaTime = (float)window.DeltaTime();
 
 		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
+		//glEnable(GL_CULL_FACE);
 
 		glClearColor(0.1f, 0.3f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -205,8 +205,9 @@ int main() {
 		// 地面.		
 		progLighting.Draw(meshList.Get(3), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1));
 		
-		// 人間.		
-		progLighting.Draw(meshList.Get(4), glm::vec3(7, 0, 7), glm::vec3(0, 0, 0), glm::vec3(5));
+		// 人間.	
+		progLighting.BindTexture(0, texHuman);
+		progLighting.Draw(meshList.Get(4), glm::vec3(7, 0, 7), glm::vec3(0, 0, 0), glm::vec3(1));
 
 		// ポイント・ライトの位置がわかるように適当なモデルを表示.
 		{
