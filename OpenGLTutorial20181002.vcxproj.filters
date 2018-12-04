@@ -76,9 +76,6 @@
     <Image Include="Res\rock.tga">
       <Filter>リソース ファイル</Filter>
     </Image>
-    <Image Include="Res\House2.tga">
-      <Filter>リソース ファイル</Filter>
-    </Image>
     <Image Include="Res\House.tga">
       <Filter>リソース ファイル</Filter>
     </Image>

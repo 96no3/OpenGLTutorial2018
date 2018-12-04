@@ -151,7 +151,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Res\House.tga" />
-    <Image Include="Res\House2.tga" />
     <Image Include="Res\rock.tga" />
   </ItemGroup>
   <ItemGroup>

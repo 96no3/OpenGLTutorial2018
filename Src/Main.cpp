@@ -97,6 +97,7 @@ int main() {
 	if (!texId3) {
 		return 1;
 	}
+	GLuint texHuman = Texture::LoadImage2D("Res/human.tga");
 
 	// ライトの設定.	
 	Shader::LightList lights;
@@ -204,6 +205,9 @@ int main() {
 		// 地面.		
 		progLighting.Draw(meshList.Get(3), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1));
 		
+		// 人間.		
+		progLighting.Draw(meshList.Get(4), glm::vec3(7, 0, 7), glm::vec3(0, 0, 0), glm::vec3(5));
+
 		// ポイント・ライトの位置がわかるように適当なモデルを表示.
 		{
 			// 0番のポイント・ライトを移動する.

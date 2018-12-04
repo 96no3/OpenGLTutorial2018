@@ -299,18 +299,21 @@ bool MeshList::AddFromObjFile(const char* path) {
 	// データ不足の場合は作成中止.
 	if (positionList.empty()) {
 		std::cerr << "WARNING: " << path << "には頂点座標の定義がありません.\n";
-		Add(nullptr, nullptr, nullptr, nullptr);
-		return false;
+		/*Add(nullptr, nullptr, nullptr, nullptr);
+		return false;*/
+		positionList.push_back({ 0, 0, 0 });
 	}
 	if (texCoordList.empty()) {
 		std::cerr << "WARNING: " << path << "にはテクスチャ座標の定義がありません.\n";
-		Add(nullptr, nullptr, nullptr, nullptr);
-		return false;
+		/*Add(nullptr, nullptr, nullptr, nullptr);
+		return false;*/
+		texCoordList.push_back({ 0, 0 });
 	}
 	if (normalList.empty()) {
 		std::cerr << "WARNING: " << path << "には法線の定義がありません.\n";
-		Add(nullptr, nullptr, nullptr, nullptr);
-		return false;
+		/*Add(nullptr, nullptr, nullptr, nullptr);
+		return false;*/
+		normalList.push_back({ 0, 1, 0 });
 	}
 
 	// 頂点データとインデックスデータ用の変数を準備.
@@ -345,23 +348,28 @@ bool MeshList::AddFromObjFile(const char* path) {
 
 			// 頂点データを追加する.
 			Vertex vertex;
+			Color color = { 1, 1, 1, 1 };
 			int v = faceList[i].v - 1;
 			if (v < 0 || v >= (int)positionList.size()) {
-				std::cerr << "WARNING: 不正なvインデックス(" << v << ")\n";
+				//std::cerr << "WARNING: 不正なvインデックス(" << v << ")\n";
+				color = { 0.5f, 0, 0, 1 };
 				v = 0;
 			}
 			int vt = faceList[i].vt - 1;
 			if (vt < 0 || vt >= (int)texCoordList.size()) {
-				std::cerr << "WARNING: 不正なvtインデックス(" << vt << ")\n";
+				//std::cerr << "WARNING: 不正なvtインデックス(" << vt << ")\n";
+				color = { 0.5f, 0, 0, 1 };
 				vt = 0;
 			}
 			int vn = faceList[i].vn - 1;
 			if (vn < 0 || vn >= (int)normalList.size()) {
-				std::cerr << "WARNING: 不正なvnインデックス(" << vn << ")\n";
+				//std::cerr << "WARNING: 不正なvnインデックス(" << vn << ")\n";
+				color = { 0.5f, 0, 0, 1 };
 				vn = 0;
 			}
 			vertex.position = positionList[v];
-			vertex.color = { 1,1,1,1 };
+			//vertex.color = { 1,1,1,1 };
+			vertex.color = color;
 			vertex.texCoord = texCoordList[vt];
 			vertex.normal = normalList[vn];
 			vertices.push_back(vertex);
@@ -395,7 +403,8 @@ bool MeshList::Allocate() {
 	//Add(std::begin(vHouse), std::end(vHouse), std::begin(iHouse), std::end(iHouse));
 	AddFromObjFile("Res/House.obj");
 	Add(std::begin(vRock), std::end(vRock), std::begin(iRock), std::end(iRock));
-	Add(std::begin(vGround), std::end(vGround), std::begin(iGround), std::end(iGround));	
+	Add(std::begin(vGround), std::end(vGround), std::begin(iGround), std::end(iGround));
+	AddFromObjFile("Res/human.obj");
 
 	// VAOを作成する.
 	GLuint vbo = CreateVBO(tmpVertices.size() * sizeof(Vertex), tmpVertices.data());
