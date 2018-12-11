@@ -93,10 +93,13 @@ int main() {
 		B, W, B, W, B, W, B, W,
 	};
 	GLuint texId3 = Texture::CreateImage2D(imageWidth, imageHeight, imageData3, GL_RGBA, GL_UNSIGNED_BYTE);
-	GLuint texRock = Texture::LoadImage2D("Res/rock.tga");
+	//GLuint texRock = Texture::LoadImage2D("Res/rock.tga");
+	GLuint texRock = Texture::LoadImage2D("Res/Model/Rock2.tga");
 	if (!texId3) {
 		return 1;
 	}
+	GLuint texTree = Texture::LoadImage2D("Res/Model/Tree2.tga");
+	GLuint texGround = Texture::LoadImage2D("Res/Model/Ground.tga");
 	GLuint texHuman = Texture::LoadImage2D("Res/human.tga");
 
 	// ライトの設定.	
@@ -117,7 +120,7 @@ int main() {
 		const float deltaTime = (float)window.DeltaTime();
 
 		glEnable(GL_DEPTH_TEST);
-		//glEnable(GL_CULL_FACE);
+		glEnable(GL_CULL_FACE);
 
 		glClearColor(0.1f, 0.3f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -141,7 +144,8 @@ int main() {
 		meshList.BindVertexArray();
 		
 		progLighting.SetLightList(lights);
-		progLighting.BindTexture(0, texId2);
+		//progLighting.BindTexture(0, texId2);
+		progLighting.BindTexture(0, texTree);
 
 		const float treeCount = 10;	// 木の本数.
 		const float radius = 8;		// 木を植える円の半径.
@@ -181,9 +185,9 @@ int main() {
 			}
 		}
 
-		glUseProgram(shaderProgram);
+		/*glUseProgram(shaderProgram);
 
-		glActiveTexture(GL_TEXTURE0);
+		glActiveTexture(GL_TEXTURE0);*/
 		//glBindTexture(GL_TEXTURE_2D, texId3);
 		glBindTexture(GL_TEXTURE_2D, texRock);
 
@@ -192,17 +196,18 @@ int main() {
 		for (float i = 0; i < rockCount; i++) {
 			const float x = std::cos(3.14f * 2 / rockCount * i) * rockRadius;
 			const float z = std::sin(3.14f * 2 / rockCount * i) * rockRadius;
-			const glm::mat4x4 matModel = glm::translate(glm::mat4(1), glm::vec3(x, 0, z));
+			/*const glm::mat4x4 matModel = glm::translate(glm::mat4(1), glm::vec3(x, 0, z));
 			const glm::mat4x4 matMVP = matProj * matView * matModel;
 			glUniformMatrix4fv(matMVPLoc, 1, GL_FALSE, &matMVP[0][0]);
-			glDrawElementsBaseVertex(meshList.Get(2).mode, meshList.Get(2).count, GL_UNSIGNED_SHORT, meshList.Get(2).indices, meshList.Get(2).baseVertex);
+			glDrawElementsBaseVertex(meshList.Get(2).mode, meshList.Get(2).count, GL_UNSIGNED_SHORT, meshList.Get(2).indices, meshList.Get(2).baseVertex);*/
+			progLighting.Draw(meshList.Get(2), glm::vec3(x, 0, z), glm::vec3(0, 0, 0), glm::vec3(1));
 		}
 
-		progLighting.Use();
-				
-		progLighting.BindTexture(0, texId3);
+		//progLighting.Use();
 
 		// 地面.		
+		//progLighting.BindTexture(0, texId3);
+		progLighting.BindTexture(0, texGround);
 		progLighting.Draw(meshList.Get(3), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1));
 		
 		// 人間.	
@@ -250,12 +255,12 @@ int main() {
 			// ライトの位置に木のモデルを表示.
 			glUseProgram(shaderProgram);
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, texId2);
+			glBindTexture(GL_TEXTURE_2D, texTree);
 			for (int i = 0; i < 8; ++i) {
 				//const glm::mat4 matModelT = glm::translate(glm::mat4(1), pointLightPos[i]);
 				const glm::mat4 matModelT = glm::translate(glm::mat4(1), lights.point.position[i]);
 				const glm::mat4 matModelR = glm::rotate(glm::mat4(1), angleY, glm::vec3(0, 1, 0));
-				const glm::mat4 matModelS = glm::scale(glm::mat4(1), glm::vec3(1, -0.25f, 1));
+				const glm::mat4 matModelS = glm::scale(glm::mat4(1), glm::vec3(0.5f, -0.5f, 0.5f));
 				const glm::mat4 matMVP = matProj * matView * matModelT * matModelR * matModelS;
 				glUniformMatrix4fv(matMVPLoc, 1, GL_FALSE, &matMVP[0][0]);
 				glDrawElementsBaseVertex(meshList.Get(0).mode, meshList.Get(0).count, GL_UNSIGNED_SHORT, meshList.Get(0).indices, meshList.Get(0).baseVertex);
@@ -270,6 +275,9 @@ int main() {
 	}
 	glDeleteTextures(1, &texHouse);
 	glDeleteTextures(1, &texRock);
+	glDeleteTextures(1, &texTree);
+	glDeleteTextures(1, &texGround);
+	glDeleteTextures(1, &texHuman);
 	glDeleteTextures(1, &texId);
 	glDeleteTextures(1, &texId2);
 	glDeleteTextures(1, &texId3);

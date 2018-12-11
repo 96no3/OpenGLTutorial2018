@@ -56,7 +56,7 @@ const GLushort iHouse[] = {
 };
 
 const Vertex vRock[] = {
-	{ { 1.0f, 0.0f,  1.0f },{ 0.25f, 0.25f, 0.25f, 1.0f },{ 0.0f, 0.0f } },
+{ { 1.0f, 0.0f,  1.0f },{ 0.25f, 0.25f, 0.25f, 1.0f },{ 0.0f, 0.0f } },
 { { 0.5f, 1.0f,  0.5f },{ 0.75f, 0.75f, 0.75f, 1.0f },{ 0.0f, 0.5f } },
 { { -0.5f, 1.0f,  0.5f },{ 0.75f, 0.75f, 0.75f, 1.0f },{ 0.5f, 0.5f } },
 { { -1.0f, 0.0f,  1.0f },{ 0.25f, 0.25f, 0.25f, 1.0f },{ 1.0f, 0.0f } },
@@ -76,7 +76,7 @@ const GLushort iRock[] = {
 };
 
 const Vertex vGround[] = {
-	{ { -20.0f, 0.0f,  20.0f },{ 0.6f, 0.2f, 0.0f, 1.0f },{ -2.0f,-2.0f },{ 0.00f, 1.00f, 0.00f } },
+{ { -20.0f, 0.0f,  20.0f },{ 0.6f, 0.2f, 0.0f, 1.0f },{ -2.0f,-2.0f },{ 0.00f, 1.00f, 0.00f } },
 { { -10.0f, 0.0f,  20.0f },{ 0.6f, 0.2f, 0.0f, 1.0f },{ -1.0f,-2.0f },{ 0.00f, 1.00f, 0.00f } },
 { { 0.0f, 0.0f,  20.0f },{ 0.6f, 0.2f, 0.0f, 1.0f },{ 0.0f,-2.0f },{ 0.00f, 1.00f, 0.00f } },
 { { 10.0f, 0.0f,  20.0f },{ 0.6f, 0.2f, 0.0f, 1.0f },{ 1.0f,-2.0f },{ 0.00f, 1.00f, 0.00f } },
@@ -399,11 +399,13 @@ bool MeshList::Allocate() {
 
 	// ÉÅÉbÉVÉÖÇí«â¡.
 	//Add(std::begin(vTree), std::end(vTree), std::begin(iTree), std::end(iTree));
-	AddFromObjFile("Res/Tree.obj");
+	AddFromObjFile("Res/Model/Tree.obj");
 	//Add(std::begin(vHouse), std::end(vHouse), std::begin(iHouse), std::end(iHouse));
 	AddFromObjFile("Res/house2.obj");
-	Add(std::begin(vRock), std::end(vRock), std::begin(iRock), std::end(iRock));
-	Add(std::begin(vGround), std::end(vGround), std::begin(iGround), std::end(iGround));
+	//Add(std::begin(vRock), std::end(vRock), std::begin(iRock), std::end(iRock));
+	AddFromObjFile("Res/Model/Rock2.obj");
+	//Add(std::begin(vGround), std::end(vGround), std::begin(iGround), std::end(iGround));
+	AddFromObjFile("Res/Model/Ground.obj");
 	AddFromObjFile("Res/human.obj");
 
 	// VAOÇçÏê¨Ç∑ÇÈ.
