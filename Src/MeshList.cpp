@@ -299,20 +299,14 @@ bool MeshList::AddFromObjFile(const char* path) {
 	// データ不足の場合は作成中止.
 	if (positionList.empty()) {
 		std::cerr << "WARNING: " << path << "には頂点座標の定義がありません.\n";
-		/*Add(nullptr, nullptr, nullptr, nullptr);
-		return false;*/
 		positionList.push_back({ 0, 0, 0 });
 	}
 	if (texCoordList.empty()) {
 		std::cerr << "WARNING: " << path << "にはテクスチャ座標の定義がありません.\n";
-		/*Add(nullptr, nullptr, nullptr, nullptr);
-		return false;*/
 		texCoordList.push_back({ 0, 0 });
 	}
 	if (normalList.empty()) {
 		std::cerr << "WARNING: " << path << "には法線の定義がありません.\n";
-		/*Add(nullptr, nullptr, nullptr, nullptr);
-		return false;*/
 		normalList.push_back({ 0, 1, 0 });
 	}
 
@@ -398,15 +392,12 @@ bool MeshList::Allocate() {
 	tmpIndices.reserve(10'000);	
 
 	// メッシュを追加.
-	//Add(std::begin(vTree), std::end(vTree), std::begin(iTree), std::end(iTree));
 	AddFromObjFile("Res/Model/Tree.obj");
-	//Add(std::begin(vHouse), std::end(vHouse), std::begin(iHouse), std::end(iHouse));
-	AddFromObjFile("Res/house2.obj");
-	//Add(std::begin(vRock), std::end(vRock), std::begin(iRock), std::end(iRock));
+	AddFromObjFile("Res/Model/house2.obj");
 	AddFromObjFile("Res/Model/Rock2.obj");
-	//Add(std::begin(vGround), std::end(vGround), std::begin(iGround), std::end(iGround));
 	AddFromObjFile("Res/Model/Ground.obj");
-	AddFromObjFile("Res/human.obj");
+	AddFromObjFile("Res/Model/human.obj");
+	AddFromObjFile("Res/Model/Plane.obj");
 
 	// VAOを作成する.
 	GLuint vbo = CreateVBO(tmpVertices.size() * sizeof(Vertex), tmpVertices.data());

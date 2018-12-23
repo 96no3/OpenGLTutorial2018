@@ -130,11 +130,69 @@ namespace Shader {
 	}
 
 	/**
+	* ライトリストを初期化する.
+	*
+	* 全ての光源の明るさを0にする.
+	*/
+	void LightList::Init() {
+		ambient.color = glm::vec3(0);
+		directional.color = glm::vec3(0);
+		for (int i = 0; i < 8; ++i) {
+			point.color[i] = glm::vec3(0);
+		}
+		for (int i = 0; i < 4; ++i) {
+			spot.color[i] = glm::vec3(0);
+		}
+	}
+
+	/**
+	* コンストラクタ.
+	*/
+	Program::Program() {
+		lights.Init();
+	}
+
+	/**
 	* コンストラクタ.
 	*
 	* @param programId	プログラム・オブジェクトのID.
 	*/
-	Program::Program(GLint programId) : id(programId) {
+	Program::Program(GLuint programId) : id(programId) {
+		lights.Init();
+		Reset(id);
+	}
+
+	/**
+	* デストラクタ.
+	*
+	* プログラム・オブジェクトを削除する.
+	*/
+	Program::~Program() {
+		if (id) {
+			glDeleteProgram(id);
+		}
+	}
+
+	/**
+	* プログラム・オブジェクトを設定する.
+	*
+	* @param programId	プログラム・オブジェクトのID.
+	*/
+	void Program::Reset(GLuint programId) {
+		glDeleteProgram(id);
+		id = programId;
+		if (id == 0) {
+			locMatMVP = -1;
+			locAmbLightCol = -1;
+			locDirLightDir = -1;
+			locDirLightCol = -1;
+			locPointLightPos = -1;
+			locPointLightCol = -1;
+			locSpotLightDir = -1;
+			locSpotLightPos = -1;
+			locSpotLightCol = -1;
+			return;
+		}
 		locMatMVP = glGetUniformLocation(id, "matMVP");
 		locAmbLightCol = glGetUniformLocation(id, "ambientLight.color");
 		locDirLightDir = glGetUniformLocation(id, "directionalLight.direction");
@@ -154,14 +212,13 @@ namespace Shader {
 	}
 
 	/**
-	* デストラクタ.
+	* プログラム・オブジェクトを設定されているか調べる.
 	*
-	* プログラム・オブジェクトを削除する.
+	* @retval true	設定されている.
+	* @retval false	設定されていない.
 	*/
-	Program::~Program() {
-		if (id) {
-			glDeleteProgram(id);
-		}
+	bool Program::IsNull() const {
+		return id;	
 	}
 
 	/**
@@ -227,6 +284,10 @@ namespace Shader {
 	* この関数を使う前に、Use()を実行しておくこと.
 	*/
 	void Program::Draw(const Mesh& mesh, const glm::vec3& translate, const glm::vec3& rotate, const glm::vec3& scale) {
+		if (id == 0) {
+			return;
+		}
+		
 		// モデル行列を計算する.
 		const glm::mat4x4 matScale = glm::scale(glm::mat4(1), scale);
 		const glm::mat4x4 matRotateZ = glm::rotate(glm::mat4(1), rotate.z, glm::vec3(0, 0, -1));

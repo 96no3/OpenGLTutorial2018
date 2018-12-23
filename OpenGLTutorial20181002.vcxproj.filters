@@ -30,6 +30,12 @@
     <ClCompile Include="Src\MeshList.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Src\MainGameScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\TitleScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -48,16 +54,10 @@
     <None Include="Res\FragmentLighting.frag">
       <Filter>リソース ファイル</Filter>
     </None>
-    <None Include="Res\Tree.obj">
+    <None Include="Res\Model\Plane.obj">
       <Filter>リソース ファイル</Filter>
     </None>
-    <None Include="Res\House.obj">
-      <Filter>リソース ファイル</Filter>
-    </None>
-    <None Include="Res\Rock.obj">
-      <Filter>リソース ファイル</Filter>
-    </None>
-    <None Include="Res\Ground.obj">
+    <None Include="Res\旧Model\Ground.obj">
       <Filter>リソース ファイル</Filter>
     </None>
   </ItemGroup>
@@ -77,12 +77,27 @@
     <ClInclude Include="Src\MeshList.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Src\MainGameScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\TitleScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Res\rock.tga">
+    <Image Include="Res\TitleBack.tga">
       <Filter>リソース ファイル</Filter>
     </Image>
-    <Image Include="Res\House.tga">
+    <Image Include="Res\TitleLogo.tga">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Res\GameOver.tga">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Res\StageClear.tga">
       <Filter>リソース ファイル</Filter>
     </Image>
   </ItemGroup>

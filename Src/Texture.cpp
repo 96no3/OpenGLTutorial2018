@@ -125,6 +125,51 @@ namespace Texture {
 			type = GL_UNSIGNED_SHORT_1_5_5_5_REV;
 		}
 		return CreateImage2D(width, height, buf.data(), format, type);
-	}	
+	}
+
+	/**
+	* コンストラクタ.
+	*
+	* @param texId テクスチャ・オブジェクトのID.
+	*/
+	Image2D::Image2D(GLuint texId) {
+		Reset(texId);
+	}
+
+	/**
+	* デストラクタ.
+	*/
+	Image2D::~Image2D() {
+		glDeleteTextures(1, &id);
+	}
 	
+	/**
+	* テクスチャ・オブジェクトを設定する.
+	*
+	* @param texId テクスチャ・オブジェクトのID.
+	*/
+	void Image2D::Reset(GLuint texId) {
+		glDeleteTextures(1, &id);
+		id = texId;
+	}
+
+	/**
+	* テクスチャ・オブジェクトが設定されているか調べる.
+	*
+	* @retval true	設定されている.
+	* @retval false 設定されていない.
+	*/
+	bool Image2D::IsNull() const {
+		return id;
+	}
+
+	/**
+	* テクスチャ・オブジェクトを取得する.
+	*
+	* @retval テクスチャ・オブジェクトのID.
+	*/
+	GLuint Image2D::Get() const {
+		return id;
+	}
+
 } // namespace Texture

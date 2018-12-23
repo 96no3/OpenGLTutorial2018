@@ -46,6 +46,8 @@ namespace Shader {
 		DirectionalLight directional;
 		PointLight point;
 		SpotLight spot;
+
+		void Init();
 	};
 
 	/**
@@ -53,9 +55,12 @@ namespace Shader {
 	*/
 	class Program {
 	public:
-		explicit Program(GLint programId);
+		Program();
+		explicit Program(GLuint programId);
 		~Program();
 
+		void Reset(GLuint programId);
+		bool IsNull() const;
 		void Use();
 		void BindTexture(GLuint, GLuint);
 		void SetLightList(const LightList&);
@@ -63,20 +68,22 @@ namespace Shader {
 		void Draw(const Mesh& mesh, const glm::vec3& translate, const glm::vec3& rotate, const glm::vec3& scale);
 
 	private:
-		GLint id;	// プログラムID.
+		//GLint id;	// プログラムID.
+		GLint id = 0;	// プログラムID.
 
-		// uniform変数の位置.
-		GLint locMatMVP;
-		GLint locAmbLightCol;
-		GLint locDirLightDir;
-		GLint locDirLightCol;
-		GLint locPointLightPos;
-		GLint locPointLightCol;
-		GLint locSpotLightDir;
-		GLint locSpotLightPos;
-		GLint locSpotLightCol;
+		// uniform変数の位置.		
+		GLint locMatMVP = -1;
+		GLint locAmbLightCol = -1;
+		GLint locDirLightDir = -1;
+		GLint locDirLightCol = -1;
+		GLint locPointLightPos = -1;
+		GLint locPointLightCol = -1;
+		GLint locSpotLightDir = -1;
+		GLint locSpotLightPos = -1;
+		GLint locSpotLightCol = -1;
 
-		glm::mat4 matVP;	// ビュー・プロジェクション行列.
+		//glm::mat4 matVP;	// ビュー・プロジェクション行列.
+		glm::mat4 matVP = glm::mat4(1);	// ビュー・プロジェクション行列.
 		LightList lights;
 	};
 

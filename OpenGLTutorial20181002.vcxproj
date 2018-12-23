@@ -130,9 +130,11 @@
   <ItemGroup>
     <ClCompile Include="Src\GLFWEW.cpp" />
     <ClCompile Include="Src\Main.cpp" />
+    <ClCompile Include="Src\MainGameScene.cpp" />
     <ClCompile Include="Src\MeshList.cpp" />
     <ClCompile Include="Src\Shader.cpp" />
     <ClCompile Include="Src\Texture.cpp" />
+    <ClCompile Include="Src\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -145,33 +147,28 @@
   <ItemGroup>
     <ClInclude Include="Src\Geometry.h" />
     <ClInclude Include="Src\GLFWEW.h" />
+    <ClInclude Include="Src\MainGameScene.h" />
     <ClInclude Include="Src\MeshList.h" />
+    <ClInclude Include="Src\Scene.h" />
     <ClInclude Include="Src\Shader.h" />
     <ClInclude Include="Src\Texture.h" />
+    <ClInclude Include="Src\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Res\House.tga" />
-    <Image Include="Res\rock.tga" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Res\Tree.obj">
+    <None Include="Res\Model\Plane.obj">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Res\House.obj">
+    <None Include="Res\旧Model\Ground.obj">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Res\Rock.obj">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Res\Ground.obj">
-      <FileType>Document</FileType>
-    </None>
+    <Image Include="Res\GameOver.tga" />
+    <Image Include="Res\StageClear.tga" />
+    <Image Include="Res\TitleBack.tga" />
+    <Image Include="Res\TitleLogo.tga" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
