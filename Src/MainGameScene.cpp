@@ -68,6 +68,10 @@ bool MainGameScene::Initialize() {
 	texLeaf.Reset(Texture::LoadImage2D("Res/Model/leaf.tga"));
 	texMushroom.Reset(Texture::LoadImage2D("Res/Model/mushroom.tga"));
 
+	if (texId.IsNull()) {
+		return false;
+	}
+
 	// ライトの設定.
 	lights.ambient.color = glm::vec3(0.05f, 0.1f, 0.1f);			// 環境光の色.
 	lights.directional.direction = glm::normalize(glm::vec3(5, -2, -2));	// 指向性ライトの方向.

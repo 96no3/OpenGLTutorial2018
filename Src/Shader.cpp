@@ -214,11 +214,11 @@ namespace Shader {
 	/**
 	* プログラム・オブジェクトを設定されているか調べる.
 	*
-	* @retval true	設定されている.
-	* @retval false	設定されていない.
+	* @retval true	設定されていない.
+	* @retval false	設定されている.
 	*/
 	bool Program::IsNull() const {
-		return id;	
+		return id == 0;	
 	}
 
 	/**

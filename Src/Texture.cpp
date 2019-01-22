@@ -156,11 +156,11 @@ namespace Texture {
 	/**
 	* テクスチャ・オブジェクトが設定されているか調べる.
 	*
-	* @retval true	設定されている.
-	* @retval false 設定されていない.
+	* @retval true	設定されていない.
+	* @retval false 設定されている.
 	*/
 	bool Image2D::IsNull() const {
-		return id;
+		return id == 0;
 	}
 
 	/**
