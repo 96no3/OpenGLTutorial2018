@@ -63,6 +63,10 @@ bool MainGameScene::Initialize() {
 	texRock.Reset(Texture::LoadImage2D("Res/Model/Rock2.tga"));
 	texGround.Reset(Texture::LoadImage2D("Res/Model/Ground.tga"));
 	texHuman.Reset(Texture::LoadImage2D("Res/Model/human.tga"));
+	texBarrel.Reset(Texture::LoadImage2D("Res/Model/Barrel.tga"));
+	texHome.Reset(Texture::LoadImage2D("Res/Model/home.tga"));
+	texLeaf.Reset(Texture::LoadImage2D("Res/Model/leaf.tga"));
+	texMushroom.Reset(Texture::LoadImage2D("Res/Model/mushroom.tga"));
 
 	// ƒ‰ƒCƒg‚Ìİ’è.
 	lights.ambient.color = glm::vec3(0.05f, 0.1f, 0.1f);			// ŠÂ‹«Œõ‚ÌF.
@@ -172,8 +176,8 @@ void MainGameScene::Render() {
 	meshList.BindVertexArray();
 
 	progLighting.SetLightList(lights);
-	progLighting.BindTexture(0, texTree.Get());
 
+	progLighting.BindTexture(0, texTree.Get());
 	const float treeCount = 10;	// –Ø‚Ì–{”.
 	const float radius = 8;		// –Ø‚ğA‚¦‚é‰~‚Ì”¼Œa.
 	for (float i = 0; i < treeCount; ++i) {
@@ -185,7 +189,6 @@ void MainGameScene::Render() {
 	}
 
 	progLighting.BindTexture(0, texHouse.Get());
-
 	const float houseCount = 3;		// ‰Æ‚Ì”.
 	const float houseRadius = 14;	// ‰Æ‚ğ’u‚­‰~‚Ì”¼Œa.
 	for (float i = 0; i < houseCount; i++) {
@@ -200,7 +203,6 @@ void MainGameScene::Render() {
 	}
 
 	progLighting.BindTexture(0, texRock.Get());
-
 	const float rockCount = 4;		// Šâ‚Ì”.
 	const float rockRadius = 5;		// Šâ‚ğ’u‚­‰~‚Ì”¼Œa.
 	for (float i = 0; i < rockCount; i++) {
@@ -216,6 +218,37 @@ void MainGameScene::Render() {
 	// lŠÔ.	
 	progLighting.BindTexture(0, texHuman.Get());
 	progLighting.Draw(meshList.Get(4), glm::vec3(7, 0, 7), glm::vec3(0, 0, 0), glm::vec3(1));
+
+	progLighting.BindTexture(0, texBarrel.Get());
+	const float barrelCount = 6;		// ’M‚Ì”.
+	const float barrelRadius = 16;		// ’M‚ğ’u‚­‰~‚Ì”¼Œa.
+	for (float i = 0; i < barrelCount; i++) {
+		const float x = std::cos(3.14f * 2 / barrelCount * i) * barrelRadius;
+		const float z = std::sin(3.14f * 2 / barrelCount * i) * barrelRadius;
+		progLighting.Draw(meshList.Get(5), glm::vec3(x, 0, z), glm::vec3(0, 0, 0), glm::vec3(1));
+	}
+
+	// “ñ¢‘ÑZ‘î.	
+	progLighting.BindTexture(0, texHome.Get());
+	progLighting.Draw(meshList.Get(6), glm::vec3(20, 0, -17), glm::vec3(0, 0, 0), glm::vec3(1));
+
+	progLighting.BindTexture(0, texLeaf.Get());
+	const float leafCount = 8;		// —t‚Ì”.
+	const float leafRadius = 18;		// —t‚ğ’u‚­‰~‚Ì”¼Œa.
+	for (float i = 0; i < leafCount; i++) {
+		const float x = std::cos(3.14f * 2 / leafCount * i) * leafRadius;
+		const float z = std::sin(3.14f * 2 / leafCount * i) * leafRadius;
+		progLighting.Draw(meshList.Get(7), glm::vec3(x, 0, z), glm::vec3(0, 0, 0), glm::vec3(1));
+	}
+
+	progLighting.BindTexture(0, texMushroom.Get());
+	const float mushroomCount = 10;		// ƒLƒmƒR‚Ì”.
+	const float mushroomRadius = 20;		// ƒLƒmƒR‚ğ’u‚­‰~‚Ì”¼Œa.
+	for (float i = 0; i < leafCount; i++) {
+		const float x = std::cos(3.14f * 2 / mushroomCount * i) * mushroomRadius;
+		const float z = std::sin(3.14f * 2 / mushroomCount * i) * mushroomRadius;
+		progLighting.Draw(meshList.Get(8), glm::vec3(x, 0, z), glm::vec3(0, 0, 0), glm::vec3(1));
+	}
 
 	// ƒ|ƒCƒ“ƒgEƒ‰ƒCƒg‚ÌˆÊ’u‚ª‚í‚©‚é‚æ‚¤‚É“K“–‚Èƒ‚ƒfƒ‹‚ğ•\¦.
 	{

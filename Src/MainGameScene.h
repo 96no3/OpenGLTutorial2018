@@ -37,6 +37,10 @@ private:
 	Texture::Image2D texRock;
 	Texture::Image2D texGround;
 	Texture::Image2D texHuman;
+	Texture::Image2D texBarrel;
+	Texture::Image2D texHome;
+	Texture::Image2D texLeaf;
+	Texture::Image2D texMushroom;
 
 	Shader::Program progSimple;
 	Shader::Program progLighting;
