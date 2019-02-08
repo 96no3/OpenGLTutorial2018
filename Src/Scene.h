@@ -20,6 +20,7 @@ public:
 	virtual void Render() = 0;
 	virtual void Finalize() = 0;
 
+	// ƒV[ƒ“Ø‚è‘Ö‚¦—p‚ÌŠÖ”.
 	const std::string& NextScene() const { return nextScene; }
 	void NextScene(const char* name) { nextScene = name; }
 

@@ -290,18 +290,23 @@ namespace Shader {
 		
 		// モデル行列を計算する.
 		const glm::mat4x4 matScale = glm::scale(glm::mat4(1), scale);
-		const glm::mat4x4 matRotateZ = glm::rotate(glm::mat4(1), rotate.z, glm::vec3(0, 0, -1));
+		/*const glm::mat4x4 matRotateZ = glm::rotate(glm::mat4(1), rotate.z, glm::vec3(0, 0, -1));
 		const glm::mat4x4 matRotateXZ = glm::rotate(matRotateZ, rotate.x, glm::vec3(1, 0, 0));
-		const glm::mat4x4 matRotateYXZ = glm::rotate(matRotateXZ, rotate.y, glm::vec3(0, 1, 0));
+		const glm::mat4x4 matRotateYXZ = glm::rotate(matRotateXZ, rotate.y, glm::vec3(0, 1, 0));*/
+		const glm::mat4x4 matRotateY = glm::rotate(glm::mat4(1), rotate.y, glm::vec3(0, 1, 0));
+		const glm::mat4x4 matRotateZY = glm::rotate(matRotateY, rotate.z, glm::vec3(0, 0, -1));
+		const glm::mat4x4 matRotateXZY = glm::rotate(matRotateZY, rotate.x, glm::vec3(1, 0, 0));
 		const glm::mat4x4 matTranslate = glm::translate(glm::mat4(1), translate);
-		const glm::mat4x4 matModel = matTranslate * matRotateYXZ * matScale;
+		//const glm::mat4x4 matModel = matTranslate * matRotateYXZ * matScale;
+		const glm::mat4x4 matModel = matTranslate * matRotateXZY * matScale;
 
 		// モデル・ビュー・プロジェクション行列を計算し、GPUメモリに転送する.
 		const glm::mat4x4 matMVP = matVP * matModel;
 		glUniformMatrix4fv(locMatMVP, 1, GL_FALSE, &matMVP[0][0]);
 
 		// 指向性ライトの向きをモデル座標系に変換してGPUメモリに転送する.
-		const glm::mat3 matInvRotate = glm::inverse(glm::mat3(matRotateYXZ));
+		//const glm::mat3 matInvRotate = glm::inverse(glm::mat3(matRotateYXZ));
+		const glm::mat3 matInvRotate = glm::inverse(glm::mat3(matRotateXZY));
 		if (locDirLightDir >= 0) {
 			const glm::vec3 dirLightDirOnModel = matInvRotate * lights.directional.direction;
 			glUniform3fv(locDirLightDir, 1, &dirLightDirOnModel.x);
@@ -318,7 +323,7 @@ namespace Shader {
 		}
 
 		// モデル座標系におけるスポットライトの座標を計算し、GPUメモリに転送する.(スポット・ライトの方向と位置をモデル座標系に変換してGPUメモリに転送する.)
-		if (locSpotLightDir >= 0 && locSpotLightPos) {
+		if (locSpotLightDir >= 0 && locSpotLightPos >= 0) {
 			glm::vec4 spotLightDirOnModel[4];
 			glm::vec4 spotLightPosOnModel[4];
 			for (int i = 0; i < 4; ++i) {

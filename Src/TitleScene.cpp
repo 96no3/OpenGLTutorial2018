@@ -77,9 +77,9 @@ void TitleScene::Render() {
 
 	// ”wŒi‚ÆƒƒS‚ğƒEƒBƒ“ƒhƒE‚Ì’†S‚É•`‰æ.
 	progSimple.BindTexture(0, texBackGround.Get());
-	progSimple.Draw(meshList.Get(9), glm::vec3(400, 300, -1), glm::vec3(0), glm::vec3(400, 300, 1));
+	progSimple.Draw(meshList.Get(12), glm::vec3(400, 300, -1), glm::vec3(0), glm::vec3(400, 300, 1));
 	progSimple.BindTexture(0, texLogo.Get());
-	progSimple.Draw(meshList.Get(9), glm::vec3(400, 300, 0), glm::vec3(0), glm::vec3(400, 300, 1));
+	progSimple.Draw(meshList.Get(12), glm::vec3(400, 300, 0), glm::vec3(0), glm::vec3(400, 300, 1));
 }
 
 /**

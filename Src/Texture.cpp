@@ -76,6 +76,16 @@ namespace Texture {
 		// TGAヘッダを読み込む.
 		std::basic_ifstream<uint8_t> ifs;
 		ifs.open(path, std::ios_base::binary);
+
+		if (!ifs) {
+			std::cerr << "WARNING: " << path << "を開けません." << std::endl;
+			return false;
+		}
+
+		// LoadImage2Dの高速化.読み込み用メモリを明示的に設定して、読み込み時間を短くする.
+		std::vector<uint8_t> tmp(1024 * 1024);
+		ifs.rdbuf()->pubsetbuf(tmp.data(), tmp.size());
+
 		uint8_t tgaHeader[18];
 		ifs.read(tgaHeader, 18);
 

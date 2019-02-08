@@ -36,25 +36,28 @@
     <ClCompile Include="Src\TitleScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Actor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Res\Simple.vert">
-      <Filter>リソース ファイル</Filter>
-    </None>
-    <None Include="Res\Simple.frag">
-      <Filter>リソース ファイル</Filter>
-    </None>
-    <None Include="Res\VertexLighting.vert">
-      <Filter>リソース ファイル</Filter>
-    </None>
-    <None Include="Res\FragmentLighting.vert">
-      <Filter>リソース ファイル</Filter>
-    </None>
-    <None Include="Res\FragmentLighting.frag">
-      <Filter>リソース ファイル</Filter>
-    </None>
     <None Include="Res\Model\Plane.obj">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Res\Shader\VertexLighting.vert">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Res\Shader\Simple.vert">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Res\Shader\Simple.frag">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Res\Shader\FragmentLighting.vert">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Res\Shader\FragmentLighting.frag">
       <Filter>リソース ファイル</Filter>
     </None>
   </ItemGroup>
@@ -83,18 +86,39 @@
     <ClInclude Include="Src\Scene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Actor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Res\TitleBack.tga">
+    <Image Include="Res\Model\ground4.tga">
       <Filter>リソース ファイル</Filter>
     </Image>
-    <Image Include="Res\TitleLogo.tga">
+    <Image Include="Res\Model\rock3.tga">
       <Filter>リソース ファイル</Filter>
     </Image>
-    <Image Include="Res\GameOver.tga">
+    <Image Include="Res\Image\Score.tga">
       <Filter>リソース ファイル</Filter>
     </Image>
-    <Image Include="Res\StageClear.tga">
+    <Image Include="Res\Image\Number_0.tga">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Res\Image\TitleBack.tga">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Res\Image\TitleLogo.tga">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Res\Image\HP.tga">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Res\Image\StageClear.tga">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Res\Image\GameOver.tga">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Res\Image\Day.tga">
       <Filter>リソース ファイル</Filter>
     </Image>
   </ItemGroup>
@@ -112,6 +136,18 @@
       <Filter>リソース ファイル</Filter>
     </Object>
     <Object Include="Res\Model\Ground.obj">
+      <Filter>リソース ファイル</Filter>
+    </Object>
+    <Object Include="Res\Model\mountain.obj">
+      <Filter>リソース ファイル</Filter>
+    </Object>
+    <Object Include="Res\Model\human.obj">
+      <Filter>リソース ファイル</Filter>
+    </Object>
+    <Object Include="..\..\backup\OpenGLTutorial\2018\OpenGLTutorial20181223\Res\Model\twinte.obj">
+      <Filter>リソース ファイル</Filter>
+    </Object>
+    <Object Include="..\..\backup\OpenGLTutorial\2018\OpenGLTutorial20181223\Res\Model\twinte2.obj">
       <Filter>リソース ファイル</Filter>
     </Object>
   </ItemGroup>

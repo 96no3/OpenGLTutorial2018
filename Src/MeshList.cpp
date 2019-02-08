@@ -401,6 +401,9 @@ bool MeshList::Allocate() {
 	AddFromObjFile("Res/Model/home.obj");
 	AddFromObjFile("Res/Model/leaf.obj");
 	AddFromObjFile("Res/Model/mushroom.obj");
+	AddFromObjFile("Res/Model/twinte.obj");
+	AddFromObjFile("Res/Model/city.obj");
+	AddFromObjFile("Res/Model/mountain.obj");
 	AddFromObjFile("Res/Model/Plane.obj");
 
 	// VAOÇçÏê¨Ç∑ÇÈ.

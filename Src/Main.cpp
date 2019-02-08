@@ -35,6 +35,7 @@ int main() {
 		/*mainGameScene.ProcessInput();
 		mainGameScene.Update();
 		mainGameScene.Render();*/
+
 		/*if (pTitleScene) {
 			if (pTitleScene->IsFinish()) {
 				glFinish();
@@ -58,7 +59,8 @@ int main() {
 			pMainGameScene->Update();
 			pMainGameScene->Render();
 		}*/
-		const std::string& nextScene = pScene->NextScene();
+
+		/*const std::string& nextScene = pScene->NextScene();
 		if (!nextScene.empty()) {
 			glFinish();
 			if (nextScene == "MainGameScene") {
@@ -78,8 +80,28 @@ int main() {
 		}
 		pScene->ProcessInput();
 		pScene->Update();
-		pScene->Render();
+		pScene->Render();*/
 
+		pScene->ProcessInput();
+		pScene->Update();
+		pScene->Render();
+		// NextScene‚ªÝ’è‚³‚ê‚Ä‚¢‚½‚çAƒV[ƒ“‚ðØ‚è‘Ö‚¦‚é.
+		if (!pScene->NextScene().empty()) {
+			const std::string sceneName = pScene->NextScene();
+			pScene->Finalize();
+			delete pScene;
+			pScene = nullptr;
+			if (sceneName == "MainGameScene") {
+				pScene = new MainGameScene;
+			}
+			else if (sceneName == "TitleScene") {
+				pScene = new TitleScene;
+			}
+
+			if (!pScene || !pScene->Initialize()) {
+				break;
+			}
+		}
 		window.SwapBuffers();
 	}
 	//mainGameScene.Finalize();
@@ -95,6 +117,5 @@ int main() {
 		pScene->Finalize();
 		delete pScene;
 	}
-
 	return 0;
 }
