@@ -4,6 +4,7 @@
 #ifndef SCENE_H_INCLUDED
 #define SCENE_H_INCLUDED
 #include <string>
+#include "Audio.h"
 
 /**
 * シーンの基底クラス.
@@ -23,6 +24,9 @@ public:
 	// シーン切り替え用の関数.
 	const std::string& NextScene() const { return nextScene; }
 	void NextScene(const char* name) { nextScene = name; }
+
+protected:
+	Audio::SoundPtr bgm;			// 音声制御用変数.
 
 private:
 	std::string nextScene;

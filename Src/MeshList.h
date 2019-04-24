@@ -17,6 +17,7 @@ public:
 	~MeshList();
 
 	bool Allocate();
+	bool Allocate(const std::vector<std::string>&);
 	void Free();
 	void Add(const Vertex*, const Vertex*, const GLushort*, const GLushort*);
 	bool AddFromObjFile(const char* path);

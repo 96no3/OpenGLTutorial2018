@@ -37,6 +37,7 @@ private:
 
 	float timer;
 	bool isFinish;
+	Audio::SoundPtr se;
 };
 
 #endif //TITLESCENE_H_INCLUDED

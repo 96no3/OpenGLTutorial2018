@@ -4,6 +4,7 @@
 #include "GLFWEW.h"
 #include "MainGameScene.h"
 #include "TitleScene.h"
+#include "Audio.h"
 
 /**
 * エントリーポイント.
@@ -13,6 +14,11 @@ int main() {
 	GLFWEW::Window& window = GLFWEW::Window::Instance();
 
 	if (!window.Init(800, 600, "OpenGL Tutorial")) {
+		return 1;
+	}
+	// 音声再生システムの初期化.
+	Audio::EngineRef audio = Audio::Engine::Instance();
+	if (!audio.Initialize()) {
 		return 1;
 	}
 
@@ -31,7 +37,7 @@ int main() {
 	window.InitTimer();
 	while (!window.ShouldClose()) {
 		window.UpdateTimer();
-
+		audio.Update();
 		/*mainGameScene.ProcessInput();
 		mainGameScene.Update();
 		mainGameScene.Render();*/
@@ -117,5 +123,6 @@ int main() {
 		pScene->Finalize();
 		delete pScene;
 	}
+	audio.Destroy();
 	return 0;
 }

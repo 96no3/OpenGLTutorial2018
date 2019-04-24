@@ -41,7 +41,7 @@ public:
 	glm::vec3 velocity;
 	int health = 0;
 	Rect colLocal;
-	Rect colworld;
+	Rect colWorld;
 };
 
 Actor* FindAvailableActor(std::vector<Actor*>&);
@@ -52,5 +52,25 @@ void ClearActorList(std::vector<Actor*>&);
 using CollisionHandlerType = std::function<void(Actor&, Actor&)>;
 bool DetectCollision(const Actor&, const Actor&);
 void DetectCollision(std::vector<Actor*>&, std::vector<Actor*>&, CollisionHandlerType);
+
+// 衝突した面(0=左, 1=右, 2=下, 3=上, 4=奥, 5=手前).
+enum class CollisionPlane
+{
+	none = -1, // 衝突なし.
+	negativeX = 0, // 左側.
+	positiveX, // 右側.
+	negativeY, // 下側.
+	positiveY, // 上側.
+	negativeZ, // 奥側.
+	positiveZ, // 手前側.
+};
+
+struct CollisionTime
+{
+	float time; // 衝突した時間.
+	CollisionPlane plane; // 衝突した面.
+};
+
+CollisionTime FindCollisionTime(const Actor&, const Actor&, float);
 
 #endif	// ACTOR_H_INCLUDED

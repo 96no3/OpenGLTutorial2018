@@ -80,7 +80,7 @@ void ZombieActor::Update(float deltaTime) {
 	}
 
 	// 十分に接近していなければ移動する.接近していれば攻撃する.
-	if (glm::length(v) > 0.5f) {
+	if (glm::length(v) > 1.0f) {
 		velocity = vZombieFront * moveSpeed;
 	}
 	else {
@@ -105,10 +105,27 @@ void ZombieActor::Update(float deltaTime) {
 * 初期化.
 */
 bool MainGameScene::Initialize() {
-
+	
 	random.seed(std::random_device()());
 
-	if (!meshList.Allocate()) {
+	/*if (!meshList.Allocate()) {
+		return false;
+	}*/
+	std::vector<std::string> modelFiles;
+	modelFiles.push_back("Res/Model/Tree.obj");
+	modelFiles.push_back("Res/Model/house2.obj");
+	modelFiles.push_back("Res/Model/Rock2.obj");
+	modelFiles.push_back("Res/Model/Ground.obj");
+	modelFiles.push_back("Res/Model/human.obj");
+	modelFiles.push_back("Res/Model/Barrel.obj");
+	modelFiles.push_back("Res/Model/home.obj");
+	modelFiles.push_back("Res/Model/leaf.obj");
+	modelFiles.push_back("Res/Model/mushroom.obj");
+	modelFiles.push_back("Res/Model/twinte.obj");
+	modelFiles.push_back("Res/Model/city.obj");
+	modelFiles.push_back("Res/Model/mountain.obj");
+	modelFiles.push_back("Res/Model/Plane.obj");
+	if (!meshList.Allocate(modelFiles)) {
 		return false;
 	}
 
@@ -210,6 +227,112 @@ bool MainGameScene::Initialize() {
 	enemies.resize(128);
 	for (auto& zombie : enemies) {
 		zombie = new ZombieActor;
+	}
+
+	// 静止オブジェクトの初期化.
+	objects.resize(128);
+	for (auto& e : objects) {
+		e = new Actor;
+	}
+
+	const float treeCount = 10;	// 木の本数.
+	const float radius = 8;		// 木を植える円の半径.
+	for (float i = 0; i < treeCount; ++i) {
+		const float theta = 3.14f * 2 / treeCount * i;
+		const float x = std::cos(theta) * radius;
+		const float z = std::sin(theta) * radius;
+		objects[(size_t)i]->Initialize(0, texTree.Get(), 1, glm::vec3(x, 0, z), glm::vec3(0, theta * 5, 0), glm::vec3(1));
+		objects[(size_t)i]->colLocal = { {-0.5f, 0, -0.5f }, { 1, 4, 1 } };
+		objects[(size_t)i]->Update(0);
+	}
+
+	const float houseCount = 3;		// 家の数.
+	const float houseRadius = 14;	// 家を置く円の半径.
+	for (float i = 0; i < houseCount; i++) {
+		if (i == 0) {
+			objects[treeCount + i]->Initialize(1, texHouse.Get(), 1, glm::vec3(0, 0, 0), glm::vec3(0), glm::vec3(1));
+			objects[treeCount + i]->colLocal = { {-3, 0, -3 }, { 6, 4, 6 } };
+			objects[treeCount + i]->Update(0);
+		}
+		else {
+			const float x = std::cos(3.14f * 2 / (houseCount - 1) * i) * houseRadius;
+			const float z = std::sin(3.14f * 2 / (houseCount - 1) * i) * houseRadius;
+			objects[treeCount + i]->Initialize(1, texHouse.Get(), 1, glm::vec3(x, 0, z), glm::vec3(0), glm::vec3(1));
+			objects[treeCount + i]->colLocal = { {-3, 0, -3 }, { 6, 4, 6 } };
+			objects[treeCount + i]->Update(0);
+		}
+	}
+
+	const float rockCount = 4;		// 岩の数.
+	const float rockRadius = 5;		// 岩を置く円の半径.
+	for (float i = 0; i < rockCount; i++) {
+		const float x = std::cos(3.14f * 2 / rockCount * i) * rockRadius;
+		const float z = std::sin(3.14f * 2 / rockCount * i) * rockRadius;
+		objects[treeCount + houseCount + i]->Initialize(2, texRock.Get(), 1, glm::vec3(x, 0, z), glm::vec3(0), glm::vec3(1));
+		objects[treeCount + houseCount + i]->colLocal = { {-0.5f, 0, -0.5f }, { 1, 1, 1 } };
+		objects[treeCount + houseCount + i]->Update(0);
+	}
+
+	// 地面.	
+	objects[treeCount + houseCount + rockCount + 1]->Initialize(3, texGround.Get(), 1, glm::vec3(0, 0, 0), glm::vec3(0), glm::vec3(1));
+
+	// 二世帯住宅.
+	objects[treeCount + houseCount + rockCount + 2]->Initialize(6, texHome.Get(), 1, glm::vec3(20, 0, -17), glm::vec3(0), glm::vec3(1));
+	
+	// 山.
+	objects[treeCount + houseCount + rockCount + 3]->Initialize(11, texMountain.Get(), 1, glm::vec3(0, -5, 0), glm::vec3(0), glm::vec3(2));
+	
+	//// 街.	
+	//progLighting.BindTexture(0, texCity.Get());
+	//progLighting.Draw(meshList.Get(10), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1));	
+
+	//// 人間.	
+	//progLighting.BindTexture(0, texHuman.Get());
+	//progLighting.Draw(meshList.Get(4), glm::vec3(7, 0, 7), glm::vec3(0, 0, 0), glm::vec3(1));
+
+	//// ゾンビ.	
+	//progLighting.BindTexture(0, texZombie.Get());
+	//progLighting.Draw(meshList.Get(4), glm::vec3(-7, 0, 7), glm::vec3(0, 0, 0), glm::vec3(1));
+		
+	//// ツインテちゃん.	
+	//progLighting.BindTexture(0, texTwinte.Get());
+	//progLighting.Draw(meshList.Get(9), glm::vec3(9, 0, 7), glm::vec3(0, 0, 0), glm::vec3(1));
+		
+
+	// アイテムオブジェクトの初期化.
+	items.resize(128);
+	for (auto& item : items) {
+		item = new Actor;
+	}
+
+	const float barrelCount = 6;		// 樽の数.
+	const float barrelRadius = 16;		// 樽を置く円の半径.
+	for (float i = 0; i < barrelCount; i++) {
+		const float x = std::cos(3.14f * 2 / barrelCount * i) * barrelRadius;
+		const float z = std::sin(3.14f * 2 / barrelCount * i) * barrelRadius;
+		items[(size_t)i]->Initialize(5, texBarrel.Get(), 1, glm::vec3(x, 0, z), glm::vec3(0), glm::vec3(1));
+		items[(size_t)i]->colLocal = { {-0.5f, 0, -0.5f }, { 1, 1, 1 } };
+		items[(size_t)i]->Update(0);
+	}
+
+	const float leafCount = 8;		// 葉の数.
+	const float leafRadius = 18;		// 葉を置く円の半径.
+	for (float i = 0; i < leafCount; i++) {
+		const float x = std::cos(3.14f * 2 / leafCount * i) * leafRadius;
+		const float z = std::sin(3.14f * 2 / leafCount * i) * leafRadius;
+		items[barrelCount + i]->Initialize(7, texLeaf.Get(), 1, glm::vec3(x, 0, z), glm::vec3(0), glm::vec3(1));
+		items[barrelCount + i]->colLocal = { {-0.5f, 0, -0.5f }, { 1, 1, 1 } };
+		items[barrelCount + i]->Update(0);
+	}
+
+	const float mushroomCount = 10;		// キノコの数.
+	const float mushroomRadius = 20;		// キノコを置く円の半径.
+	for (float i = 0; i < leafCount; i++) {
+		const float x = std::cos(3.14f * 2 / mushroomCount * i) * mushroomRadius;
+		const float z = std::sin(3.14f * 2 / mushroomCount * i) * mushroomRadius;
+		items[barrelCount + mushroomCount + i]->Initialize(8, texMushroom.Get(), 1, glm::vec3(x, 0, z), glm::vec3(0), glm::vec3(1));
+		items[barrelCount + mushroomCount + i]->colLocal = { {-0.5f, 0, -0.5f }, { 1, 1, 1 } };
+		items[barrelCount + mushroomCount + i]->Update(0);
 	}
 
 	timer = 1.0f;
@@ -363,22 +486,25 @@ void MainGameScene::Update() {
 	if (timer > 0.0f) {
 		timer -= deltaTime;
 	}
+
+	// モデルのy軸回転角を更新.
+	static float angleY = 0;
+	angleY += glm::radians(0.5f);
+	if (angleY > glm::radians(360.0f)) {
+		angleY -= glm::radians(360.0f);
+	}
+
+	// プレイヤーの状態を更新.
+	player.Update(deltaTime);
 	
-	if (state == State::play) {
+	if (state == State::play) {		
 
-		// モデルのy軸回転角を更新.
-		static float angleY = 0;
-		angleY += glm::radians(0.5f);
-		if (angleY > glm::radians(360.0f)) {
-			angleY -= glm::radians(360.0f);
-		}
-
-		// プレイヤーの状態を更新.
-		player.Update(deltaTime);
 		// プレイヤーの弾の状態を更新.
 		UpdateActorList(playerBullets, deltaTime);
 		// ゾンビの状態を更新.
 		UpdateActorList(enemies, deltaTime);
+		/*UpdateActorList(items, deltaTime);
+		UpdateActorList(objects, deltaTime);*/
 
 		// ゾンビの発生.
 		if (enemyLeft > 0) {
@@ -415,6 +541,53 @@ void MainGameScene::Update() {
 			}
 		}
 
+		// 静止オブジェクトの更新
+		for (auto& object : objects) {
+			if (object->health > 0) {
+				if (DetectCollision(player, *object)) {
+					const CollisionTime t = FindCollisionTime(*object, player, deltaTime);
+					if (t.plane != CollisionPlane::none) {
+						const float time = deltaTime * t.time - 0.00001f;
+						player.position += player.velocity * time;
+						if (t.plane == CollisionPlane::negativeX || t.plane == CollisionPlane::positiveX) {
+							player.velocity.x = 0;
+						}
+						else if (t.plane == CollisionPlane::negativeY || t.plane == CollisionPlane::positiveY) {
+							player.velocity.y = 0;
+						}
+						else if (t.plane == CollisionPlane::negativeZ || t.plane == CollisionPlane::positiveZ) {
+							player.velocity.z = 0;
+						}
+						player.velocity *= -t.time;
+						player.position += player.velocity * -time;
+					}
+				}
+				// プレイヤーの弾とオブジェクトの衝突判定.
+				DetectCollision(playerBullets, objects, [&](Actor& bullet, Actor& object) {
+					bullet.health = 0;
+				});
+				// ゾンビとオブジェクトの衝突判定.
+				DetectCollision(enemies, objects, [&](Actor& enemy, Actor& object) {
+					const CollisionTime t = FindCollisionTime(object, enemy, deltaTime);
+					if (t.plane != CollisionPlane::none) {
+						const float time = deltaTime * t.time - 0.00001f;
+						enemy.position += enemy.velocity * time;
+						if (t.plane == CollisionPlane::negativeX || t.plane == CollisionPlane::positiveX) {
+							enemy.velocity.x = 0;
+						}
+						else if (t.plane == CollisionPlane::negativeY || t.plane == CollisionPlane::positiveY) {
+							enemy.velocity.y = 0;
+						}
+						else if (t.plane == CollisionPlane::negativeZ || t.plane == CollisionPlane::positiveZ) {
+							enemy.velocity.z = 0;
+						}
+						enemy.velocity *= -t.time;
+						enemy.position += enemy.velocity * -time;
+					}
+				});
+			}
+		}
+
 		// プレイヤーの弾と敵の衝突判定.
 		DetectCollision(playerBullets, enemies, [&](Actor& bullet, Actor& zombie) {
 			zombie.health -= bullet.health;
@@ -428,8 +601,57 @@ void MainGameScene::Update() {
 			}
 		});
 
+		// ゾンビとゾンビの衝突判定.
+		DetectCollision(enemies, enemies, [&](Actor& enemy1, Actor& enemy2) {
+			const CollisionTime t = FindCollisionTime(enemy1, enemy2, deltaTime);
+			if (t.plane != CollisionPlane::none) {
+				const float time = deltaTime * t.time - 0.00001f;
+				enemy1.position += enemy1.velocity * time;
+				if (t.plane == CollisionPlane::negativeX || t.plane == CollisionPlane::positiveX) {
+					enemy1.velocity.x = 0;
+					enemy2.velocity.x = 0;
+				}
+				else if (t.plane == CollisionPlane::negativeY || t.plane == CollisionPlane::positiveY) {
+					enemy1.velocity.y = 0;
+					enemy2.velocity.y = 0;
+				}
+				else if (t.plane == CollisionPlane::negativeZ || t.plane == CollisionPlane::positiveZ) {
+					enemy1.velocity.z = 0;
+					enemy2.velocity.z = 0;
+				}
+				enemy1.velocity *= -t.time;
+				enemy1.position += enemy1.velocity * -time;
+				enemy2.velocity *= -t.time;
+				enemy2.position += enemy2.velocity * -time;
+			}
+		});
+
+		// ゾンビとプレイヤーの衝突判定.
+		for (auto& enemy : enemies) {
+			if (enemy->health > 0) {
+				if (DetectCollision(player, *enemy)) {
+					const CollisionTime t = FindCollisionTime(*enemy, player, deltaTime);
+					if (t.plane != CollisionPlane::none) {
+						const float time = deltaTime * t.time - 0.00001f;
+						player.position += player.velocity * time;
+						if (t.plane == CollisionPlane::negativeX || t.plane == CollisionPlane::positiveX) {
+							player.velocity.x = 0;
+						}
+						else if (t.plane == CollisionPlane::negativeY || t.plane == CollisionPlane::positiveY) {
+							player.velocity.y = 0;
+						}
+						else if (t.plane == CollisionPlane::negativeZ || t.plane == CollisionPlane::positiveZ) {
+							player.velocity.z = 0;
+						}
+						player.velocity *= -t.time;
+						player.position += player.velocity * -time;
+					}
+				}
+			}
+		}
+
 		// ステージクリア判定.
-		if (state == State::play && enemyKilled >= enemyTotal) {
+		if (/*state == State::play &&*/ enemyKilled >= enemyTotal) {
 			state = State::stageClear;
 		}
 
@@ -457,7 +679,7 @@ void MainGameScene::Update() {
 		}
 
 		// ゲームオーバー判定.
-		if (state == State::play && player.health <= 0) {
+		if (/*state == State::play &&*/ player.health <= 0) {
 			state = State::gameOver;
 		}
 
@@ -516,95 +738,99 @@ void MainGameScene::Render() {
 	RenderActorList(playerBullets, progLighting, meshList);
 	// ゾンビ
 	RenderActorList(enemies, progLighting, meshList);
+	// 静止オブジェクト
+	RenderActorList(objects, progLighting, meshList);
+	// アイテム
+	RenderActorList(items, progLighting, meshList);
 
-	progLighting.BindTexture(0, texTree.Get());
-	const float treeCount = 10;	// 木の本数.
-	const float radius = 8;		// 木を植える円の半径.
-	for (float i = 0; i < treeCount; ++i) {
-		const float theta = 3.14f * 2 / treeCount * i;
-		const float x = std::cos(theta) * radius;
-		const float z = std::sin(theta) * radius;
+	//progLighting.BindTexture(0, texTree.Get());
+	//const float treeCount = 10;	// 木の本数.
+	//const float radius = 8;		// 木を植える円の半径.
+	//for (float i = 0; i < treeCount; ++i) {
+	//	const float theta = 3.14f * 2 / treeCount * i;
+	//	const float x = std::cos(theta) * radius;
+	//	const float z = std::sin(theta) * radius;
 
-		progLighting.Draw(meshList.Get(0), glm::vec3(x, 0, z), glm::vec3(0, theta * 5, 0), glm::vec3(1));
-	}
+	//	progLighting.Draw(meshList.Get(0), glm::vec3(x, 0, z), glm::vec3(0, theta * 5, 0), glm::vec3(1));
+	//}
 
-	progLighting.BindTexture(0, texHouse.Get());
-	const float houseCount = 3;		// 家の数.
-	const float houseRadius = 14;	// 家を置く円の半径.
-	for (float i = 0; i < houseCount; i++) {
-		if (i == 0) {
-			progLighting.Draw(meshList.Get(1), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1));
-		}
-		else {
-			const float x = std::cos(3.14f * 2 / (houseCount - 1) * i) * houseRadius;
-			const float z = std::sin(3.14f * 2 / (houseCount - 1) * i) * houseRadius;
-			progLighting.Draw(meshList.Get(1), glm::vec3(x, 0, z), glm::vec3(0, 0, 0), glm::vec3(1));
-		}
-	}
+	//progLighting.BindTexture(0, texHouse.Get());
+	//const float houseCount = 3;		// 家の数.
+	//const float houseRadius = 14;	// 家を置く円の半径.
+	//for (float i = 0; i < houseCount; i++) {
+	//	if (i == 0) {
+	//		progLighting.Draw(meshList.Get(1), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1));
+	//	}
+	//	else {
+	//		const float x = std::cos(3.14f * 2 / (houseCount - 1) * i) * houseRadius;
+	//		const float z = std::sin(3.14f * 2 / (houseCount - 1) * i) * houseRadius;
+	//		progLighting.Draw(meshList.Get(1), glm::vec3(x, 0, z), glm::vec3(0, 0, 0), glm::vec3(1));
+	//	}
+	//}
 
-	progLighting.BindTexture(0, texRock.Get());
-	const float rockCount = 4;		// 岩の数.
-	const float rockRadius = 5;		// 岩を置く円の半径.
-	for (float i = 0; i < rockCount; i++) {
-		const float x = std::cos(3.14f * 2 / rockCount * i) * rockRadius;
-		const float z = std::sin(3.14f * 2 / rockCount * i) * rockRadius;
-		progLighting.Draw(meshList.Get(2), glm::vec3(x, 0, z), glm::vec3(0, 0, 0), glm::vec3(1));
-	}
+	//progLighting.BindTexture(0, texRock.Get());
+	//const float rockCount = 4;		// 岩の数.
+	//const float rockRadius = 5;		// 岩を置く円の半径.
+	//for (float i = 0; i < rockCount; i++) {
+	//	const float x = std::cos(3.14f * 2 / rockCount * i) * rockRadius;
+	//	const float z = std::sin(3.14f * 2 / rockCount * i) * rockRadius;
+	//	progLighting.Draw(meshList.Get(2), glm::vec3(x, 0, z), glm::vec3(0, 0, 0), glm::vec3(1));
+	//}
 
-	// 地面.	
-	progLighting.BindTexture(0, texGround.Get());
-	progLighting.Draw(meshList.Get(3), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1));
+	//// 地面.	
+	//progLighting.BindTexture(0, texGround.Get());
+	//progLighting.Draw(meshList.Get(3), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1));
 
-	// 人間.	
-	progLighting.BindTexture(0, texHuman.Get());
-	progLighting.Draw(meshList.Get(4), glm::vec3(7, 0, 7), glm::vec3(0, 0, 0), glm::vec3(1));
+	//// 人間.	
+	//progLighting.BindTexture(0, texHuman.Get());
+	//progLighting.Draw(meshList.Get(4), glm::vec3(7, 0, 7), glm::vec3(0, 0, 0), glm::vec3(1));
 
-	// ゾンビ.	
-	progLighting.BindTexture(0, texZombie.Get());
-	progLighting.Draw(meshList.Get(4), glm::vec3(-7, 0, 7), glm::vec3(0, 0, 0), glm::vec3(1));
+	//// ゾンビ.	
+	//progLighting.BindTexture(0, texZombie.Get());
+	//progLighting.Draw(meshList.Get(4), glm::vec3(-7, 0, 7), glm::vec3(0, 0, 0), glm::vec3(1));
 
-	progLighting.BindTexture(0, texBarrel.Get());
-	const float barrelCount = 6;		// 樽の数.
-	const float barrelRadius = 16;		// 樽を置く円の半径.
-	for (float i = 0; i < barrelCount; i++) {
-		const float x = std::cos(3.14f * 2 / barrelCount * i) * barrelRadius;
-		const float z = std::sin(3.14f * 2 / barrelCount * i) * barrelRadius;
-		progLighting.Draw(meshList.Get(5), glm::vec3(x, 0, z), glm::vec3(0, 0, 0), glm::vec3(1));
-	}
+	//progLighting.BindTexture(0, texBarrel.Get());
+	//const float barrelCount = 6;		// 樽の数.
+	//const float barrelRadius = 16;		// 樽を置く円の半径.
+	//for (float i = 0; i < barrelCount; i++) {
+	//	const float x = std::cos(3.14f * 2 / barrelCount * i) * barrelRadius;
+	//	const float z = std::sin(3.14f * 2 / barrelCount * i) * barrelRadius;
+	//	progLighting.Draw(meshList.Get(5), glm::vec3(x, 0, z), glm::vec3(0, 0, 0), glm::vec3(1));
+	//}
 
-	// 二世帯住宅.	
-	progLighting.BindTexture(0, texHome.Get());
-	progLighting.Draw(meshList.Get(6), glm::vec3(20, 0, -17), glm::vec3(0, 0, 0), glm::vec3(1));
+	//// 二世帯住宅.	
+	//progLighting.BindTexture(0, texHome.Get());
+	//progLighting.Draw(meshList.Get(6), glm::vec3(20, 0, -17), glm::vec3(0, 0, 0), glm::vec3(1));
 
-	progLighting.BindTexture(0, texLeaf.Get());
-	const float leafCount = 8;		// 葉の数.
-	const float leafRadius = 18;		// 葉を置く円の半径.
-	for (float i = 0; i < leafCount; i++) {
-		const float x = std::cos(3.14f * 2 / leafCount * i) * leafRadius;
-		const float z = std::sin(3.14f * 2 / leafCount * i) * leafRadius;
-		progLighting.Draw(meshList.Get(7), glm::vec3(x, 0, z), glm::vec3(0, 0, 0), glm::vec3(1));
-	}
+	//progLighting.BindTexture(0, texLeaf.Get());
+	//const float leafCount = 8;		// 葉の数.
+	//const float leafRadius = 18;		// 葉を置く円の半径.
+	//for (float i = 0; i < leafCount; i++) {
+	//	const float x = std::cos(3.14f * 2 / leafCount * i) * leafRadius;
+	//	const float z = std::sin(3.14f * 2 / leafCount * i) * leafRadius;
+	//	progLighting.Draw(meshList.Get(7), glm::vec3(x, 0, z), glm::vec3(0, 0, 0), glm::vec3(1));
+	//}
 
-	progLighting.BindTexture(0, texMushroom.Get());
-	const float mushroomCount = 10;		// キノコの数.
-	const float mushroomRadius = 20;		// キノコを置く円の半径.
-	for (float i = 0; i < leafCount; i++) {
-		const float x = std::cos(3.14f * 2 / mushroomCount * i) * mushroomRadius;
-		const float z = std::sin(3.14f * 2 / mushroomCount * i) * mushroomRadius;
-		progLighting.Draw(meshList.Get(8), glm::vec3(x, 0, z), glm::vec3(0, 0, 0), glm::vec3(1));
-	}
+	//progLighting.BindTexture(0, texMushroom.Get());
+	//const float mushroomCount = 10;		// キノコの数.
+	//const float mushroomRadius = 20;		// キノコを置く円の半径.
+	//for (float i = 0; i < leafCount; i++) {
+	//	const float x = std::cos(3.14f * 2 / mushroomCount * i) * mushroomRadius;
+	//	const float z = std::sin(3.14f * 2 / mushroomCount * i) * mushroomRadius;
+	//	progLighting.Draw(meshList.Get(8), glm::vec3(x, 0, z), glm::vec3(0, 0, 0), glm::vec3(1));
+	//}
 
-	// ツインテちゃん.	
-	progLighting.BindTexture(0, texTwinte.Get());
-	progLighting.Draw(meshList.Get(9), glm::vec3(9, 0, 7), glm::vec3(0, 0, 0), glm::vec3(1));
+	//// ツインテちゃん.	
+	//progLighting.BindTexture(0, texTwinte.Get());
+	//progLighting.Draw(meshList.Get(9), glm::vec3(9, 0, 7), glm::vec3(0, 0, 0), glm::vec3(1));
 
-	//// 街.	
-	//progLighting.BindTexture(0, texCity.Get());
-	//progLighting.Draw(meshList.Get(10), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1));
+	////// 街.	
+	////progLighting.BindTexture(0, texCity.Get());
+	////progLighting.Draw(meshList.Get(10), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1));
 
-	// 山.	
-	progLighting.BindTexture(0, texMountain.Get());
-	progLighting.Draw(meshList.Get(11), glm::vec3(-60, -5, -50), glm::vec3(0, 0, 0), glm::vec3(1));
+	//// 山.	
+	//progLighting.BindTexture(0, texMountain.Get());
+	//progLighting.Draw(meshList.Get(11), glm::vec3(-60, -5, -50), glm::vec3(0, 0, 0), glm::vec3(1));
 
 	// ポイント・ライトの位置がわかるように適当なモデルを表示.
 	{
@@ -687,8 +913,8 @@ void MainGameScene::Render() {
 		}
 	}
 	
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	/*glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, 0);*/
 }
 
 /**

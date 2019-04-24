@@ -380,31 +380,50 @@ bool MeshList::AddFromObjFile(const char* path) {
 /**
 * モデルデータからMeshのリストを作成する.
 *
-* @retval true		作成成功.
-* @retval false		作成失敗.
+* @retval true  作成成功.
+* @retval false 作成失敗.
 */
-bool MeshList::Allocate() {
-	Free();
+bool MeshList::Allocate()
+{
+	std::vector<std::string> modelFiles;
+	modelFiles.push_back("Res/Model/Tree.obj");
+	return Allocate(modelFiles);
+}
 
+/**
+* モデルデータからMeshのリストを作成する.
+*
+* @param modelFiles 読み込むモデルファイル名のリスト.
+*
+* @retval true  作成成功.
+* @retval false 作成失敗.
+*/
+bool MeshList::Allocate(const std::vector<std::string>& modelFiles)
+{
+	Free();
 	// 容量を予約.
 	meshes.reserve(100);
 	tmpVertices.reserve(10'000);
-	tmpIndices.reserve(10'000);	
+	tmpIndices.reserve(10'000);
 
-	// メッシュを追加.
-	AddFromObjFile("Res/Model/Tree.obj");
-	AddFromObjFile("Res/Model/house2.obj");
-	AddFromObjFile("Res/Model/Rock2.obj");
-	AddFromObjFile("Res/Model/Ground.obj");
-	AddFromObjFile("Res/Model/human.obj");
-	AddFromObjFile("Res/Model/Barrel.obj");
-	AddFromObjFile("Res/Model/home.obj");
-	AddFromObjFile("Res/Model/leaf.obj");
-	AddFromObjFile("Res/Model/mushroom.obj");
-	AddFromObjFile("Res/Model/twinte.obj");
-	AddFromObjFile("Res/Model/city.obj");
-	AddFromObjFile("Res/Model/mountain.obj");
-	AddFromObjFile("Res/Model/Plane.obj");
+	for (size_t i = 0; i < modelFiles.size(); ++i) {
+		AddFromObjFile(modelFiles[i].c_str());
+	}
+
+	//// メッシュを追加.
+	//AddFromObjFile("Res/Model/Tree.obj");
+	//AddFromObjFile("Res/Model/house2.obj");
+	//AddFromObjFile("Res/Model/Rock2.obj");
+	//AddFromObjFile("Res/Model/Ground.obj");
+	//AddFromObjFile("Res/Model/human.obj");
+	//AddFromObjFile("Res/Model/Barrel.obj");
+	//AddFromObjFile("Res/Model/home.obj");
+	//AddFromObjFile("Res/Model/leaf.obj");
+	//AddFromObjFile("Res/Model/mushroom.obj");
+	//AddFromObjFile("Res/Model/twinte.obj");
+	//AddFromObjFile("Res/Model/city.obj");
+	//AddFromObjFile("Res/Model/mountain.obj");
+	//AddFromObjFile("Res/Model/Plane.obj");
 
 	// VAOを作成する.
 	GLuint vbo = CreateVBO(tmpVertices.size() * sizeof(Vertex), tmpVertices.data());

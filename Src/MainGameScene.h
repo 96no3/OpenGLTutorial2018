@@ -42,7 +42,7 @@ public:
 	virtual void Update(float deltaTime) override;
 
 	Actor* target = nullptr;
-	float attackingTimer = 5.0f;
+	float attackingTimer = 1.0f;
 	bool isAttacking = false;
 	float baseSpeed = 1.0f;
 };
@@ -103,6 +103,8 @@ private:
 	PlayerActor player;
 	std::vector<Actor*> playerBullets;
 	std::vector<Actor*> enemies;
+	std::vector<Actor*> objects;
+	std::vector<Actor*> items;
 
 	std::mt19937 random;
 

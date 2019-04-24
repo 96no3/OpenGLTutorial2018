@@ -9,9 +9,14 @@
 */
 bool TitleScene::Initialize() {
 
-	if (!meshList.Allocate()) {
+	std::vector<std::string> modelList;
+	modelList.push_back("Res/Model/Plane.obj");
+	if (!meshList.Allocate(modelList)) {
 		return false;
 	}
+	/*if (!meshList.Allocate()) {
+		return false;
+	}*/
 
 	progSimple.Reset(Shader::BuildFromFile("Res/Shader/Simple.vert", "Res/Shader/Simple.frag"));
 
@@ -20,7 +25,10 @@ bool TitleScene::Initialize() {
 
 	timer = 1.0f;
 	isFinish = false;
-
+	bgm = Audio::Engine::Instance().Prepare("Res/Audio/start.wav");
+	se = Audio::Engine::Instance().Prepare("Res/Audio/Start.xwm");
+	// titleBGMをループ再生する.
+	bgm->Play(Audio::Flag_Loop);
 	return true;
 }
 
@@ -35,6 +43,8 @@ void TitleScene::ProcessInput() {
 		if (window.IsKeyPressed(GLFW_KEY_ENTER)) {
 			isFinish = true;
 			NextScene("MainGameScene");
+			se->Play();
+			
 		}
 	}
 }
@@ -77,9 +87,9 @@ void TitleScene::Render() {
 
 	// 背景とロゴをウィンドウの中心に描画.
 	progSimple.BindTexture(0, texBackGround.Get());
-	progSimple.Draw(meshList.Get(12), glm::vec3(400, 300, -1), glm::vec3(0), glm::vec3(400, 300, 1));
+	progSimple.Draw(meshList.Get(0), glm::vec3(400, 300, -1), glm::vec3(0), glm::vec3(400, 300, 1));
 	progSimple.BindTexture(0, texLogo.Get());
-	progSimple.Draw(meshList.Get(12), glm::vec3(400, 300, 0), glm::vec3(0), glm::vec3(400, 300, 1));
+	progSimple.Draw(meshList.Get(0), glm::vec3(400, 300, 0), glm::vec3(0), glm::vec3(400, 300, 1));
 }
 
 /**

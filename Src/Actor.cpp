@@ -40,8 +40,8 @@ void Actor::Finalize() {
 */
 void Actor::Update(float deltaTime) {
 	position += velocity * deltaTime;
-	colworld.origin = colLocal.origin + position;
-	colworld.size = colLocal.size;
+	colWorld.origin = colLocal.origin + position;
+	colWorld.size = colLocal.size;
 }
 
 /**
@@ -104,7 +104,10 @@ void RenderActorList(std::vector<Actor*>& actorList, Shader::Program& shader, Me
 void ClearActorList(std::vector<Actor*>& actorList) {
 
 	for (auto& actor : actorList) {
-		delete actor;
+		if (actor) {
+			actor->Finalize();
+			delete actor;
+		}
 	}
 	actorList.clear();
 }
@@ -120,12 +123,12 @@ void ClearActorList(std::vector<Actor*>& actorList) {
 */
 bool DetectCollision(const Actor& lhs, const Actor& rhs) {
 	return
-		lhs.colworld.origin.x < rhs.colworld.origin.x + rhs.colworld.size.x &&
-		lhs.colworld.origin.x + lhs.colworld.size.x > rhs.colworld.origin.x &&
-		lhs.colworld.origin.y < rhs.colworld.origin.y + rhs.colworld.size.y &&
-		lhs.colworld.origin.y + lhs.colworld.size.y > rhs.colworld.origin.y &&
-		lhs.colworld.origin.z < rhs.colworld.origin.z + rhs.colworld.size.z &&
-		lhs.colworld.origin.z + lhs.colworld.size.z > rhs.colworld.origin.z;
+		lhs.colWorld.origin.x < rhs.colWorld.origin.x + rhs.colWorld.size.x &&
+		lhs.colWorld.origin.x + lhs.colWorld.size.x > rhs.colWorld.origin.x &&
+		lhs.colWorld.origin.y < rhs.colWorld.origin.y + rhs.colWorld.size.y &&
+		lhs.colWorld.origin.y + lhs.colWorld.size.y > rhs.colWorld.origin.y &&
+		lhs.colWorld.origin.z < rhs.colWorld.origin.z + rhs.colWorld.size.z &&
+		lhs.colWorld.origin.z + lhs.colWorld.size.z > rhs.colWorld.origin.z;
 }
 
 /**
@@ -152,4 +155,70 @@ void DetectCollision(std::vector<Actor*>& va, std::vector<Actor*>& vb, Collision
 			}
 		}
 	}
+}
+
+/**
+* 衝突するまでの経過時間を計算する.
+*/
+CollisionTime FindCollisionTime(const Actor& a, const Actor& b, float deltaTime)
+{
+	const glm::vec3 aMin = a.colWorld.origin;
+	const glm::vec3 aMax = aMin + a.colWorld.size;
+	const glm::vec3 bMin = b.colWorld.origin;
+	const glm::vec3 bMax = bMin + b.colWorld.size;
+
+	// アクターaが静止、アクターbが移動しているとみなし、衝突が起こった最短時刻を調べる.
+	const glm::vec3 v = (b.velocity - a.velocity) * deltaTime;
+	float tfirst = -1.0f;
+	float tlast = 0.0f;
+	CollisionPlane plane = CollisionPlane::none;
+	for (int i = 0; i < 3; ++i) {
+		// 移動方向によって調べる向きを変える.
+		if (v[i] < 0) { // bは左へ移動中.
+		  // aが右側にある(既に離れている)場合は衝突なし.
+			if (bMax[i] < aMin[i]) {
+				return { 1, CollisionPlane::none };
+			}
+			// 静止側(a)右端が移動側(b)左端より右にある(行き過ぎている)場合、過去の衝突時刻を計算.
+			// より大きいほうを衝突開始時刻として採用.
+			if (aMax[i] > bMin[i]) {
+				const float newTime = (aMax[i] - bMin[i]) / v[i];
+				if (newTime > tfirst) {
+					const CollisionPlane planes[] = { CollisionPlane::positiveX, CollisionPlane::positiveY, CollisionPlane::positiveZ };
+					plane = planes[i];
+					tfirst = newTime;
+				}
+			}
+			// 静止側(a)左端が移動側(b)右端より右にある(行き過ぎている)場合、過去の衝突時刻を計算.
+			// より小さいほうを衝突終了時刻として採用.
+			if (aMin[i] > bMax[i]) {
+				tlast = std::min((aMin[i] - bMax[i]) / v[i], tlast);
+			}
+		}
+		else if (v[i] > 0) { // bは右へ移動中.
+	   // aが左側にある(既に離れている)場合は衝突なし.
+			if (bMin[i] > aMax[i]) {
+				return { 1, CollisionPlane::none };
+			}
+			// 静止側(a)左端が移動側(b)右端より左にある(行き過ぎている)場合、過去の衝突時刻を計算.
+			if (aMin[i] < bMax[i]) {
+				const float newTime = (aMin[i] - bMax[i]) / v[i];
+				if (newTime > tfirst) {
+					const CollisionPlane planes[] = { CollisionPlane::negativeX, CollisionPlane::negativeY, CollisionPlane::negativeZ };
+					plane = planes[i];
+					tfirst = newTime;
+				}
+			}
+			// 静止側(a)右端が移動側(b)左端より左にある(行き過ぎている)場合、過去の衝突時刻を計算.
+			if (aMax[i] < bMin[i]) {
+				tlast = std::min((aMax[i] - bMin[i]) / v[i], tlast);
+			}
+		}
+	}
+
+	if (tfirst > tlast) {
+		return { 1, CollisionPlane::none };
+	}
+
+	return { tfirst, plane };
 }
